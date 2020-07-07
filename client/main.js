@@ -94,7 +94,8 @@ Template.showtodo.helpers({
 	
 	},
 	 networksname : function()
-	 {
+	 {  
+
 	 	return Network.find({todo_id:Session.get("todoidofperson")});
 	 },
 	 getnetwork_useranme :function(user_id)
@@ -110,13 +111,29 @@ Template.showtodo.helpers({
 	 		return Meteor.users.findOne({_id:user_id}).username;
 	 	}
 	 	
-	 }
+	 },
+     checktodos:function()
+     {
+     	if(Tasks.find({createdOn:Session.get("currtodoid")}).count()==0)
+     		return "NO todos yet";
+     	else
+     		return;
+
+     }
 
 	
 });
 Template.network_collections.helpers({
+	networkunchecked:function()
+	{   
+		if(Network.find({network_id:Meteor.user()._id,approved:false}).count()==0)
+		{
+			$("#modal_new_network").modal('hide');
+		}
+		return Network.find({network_id:Meteor.user()._id,approved:false});
+	},
 	network: function(){
-         return Network.find({network_id:Meteor.user()._id});
+       return Network.find({network_id:Meteor.user()._id,approved:true});
 	},
 	getTodo: function(todo_id,user_id)
 	{
@@ -141,7 +158,7 @@ Template.network_collections.helpers({
 		return Todo.findOne({_id:todo_id}).description;
 	},
 	item : function()
-	{
+	{   
 		return Tasks.find({createdOn:Session.get("currtodoid_network")},{sort:{createdAt:-1}});
 
 	},
@@ -151,9 +168,20 @@ Template.network_collections.helpers({
 			return "you";
 		else
 			return Meteor.users.findOne({_id:user_id}).username;
+	},
+	getpermission:function()
+	{
+		var unchecked=Network.find({network_id:Meteor.user()._id,approved:false}).count();
+		if(unchecked!=0)
+		{
+			$("#modal_new_network").modal('show');
+		}
+		
 	}
 
+	
 
+	
 });
 Template.network_collections.events({
 	'click .js_addtask_button_network':function(event)
@@ -167,6 +195,17 @@ Template.network_collections.events({
 			
 		    return false;
 	     },
+	     'click .js_button_network_approval':function()
+	     {
+             Meteor.call("updateapproval",this._id);
+             return false;             
+	     },
+	     'click .js_button_network_reject':function()
+	     {
+             Meteor.call("removetodo_fromnetwork",this._id);
+             return false;
+	     },
+
 	     'submit .add_task_network': function(event)
 	       {   if(Meteor.user())
 		     {   var curr=Session.get("currtodoid_network");

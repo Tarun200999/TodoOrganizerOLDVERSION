@@ -112,9 +112,9 @@
 		       <h5 class="modal-title" id="exampleModalCenterTitle">Your Tasks</h5>
 		      </div>
 		      <div class="modal-body">       
-		           
+		         {{checktodos}}  
             {{#each item}}
-          
+           
            <div class="container m-2 text-white bg-primary">
       		<div class="row">
         	<div class="col-md-8">
@@ -233,7 +233,7 @@
 		
 	</form>
 		
-		<a href="/showtodo">show me my todos</a>
+		
 		<div class="modal fade" id="modal_add_todo" style="background: rgba(0,0,0,0.5)">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -270,7 +270,7 @@
 
  <template name="navbar">
 	   <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="#">TODO LIST</a>
+            <a class="navbar-brand" href="/">TODO LIST</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
                  <span class="navbar-toggler-icon"></span>
             </button>
@@ -283,22 +283,15 @@
       			<li class="nav-item">
         			<a class="nav-link" href="/showtodo/networks">Networks</a>
       			</li>
-      			<li class="nav-item dropdown">
-        			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          			Dropdown
-        			</a>
-        			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          				<a class="dropdown-item" href="#">Action</a>
-          				<a class="dropdown-item" href="#">Another action</a>
-          				<div class="dropdown-divider"></div>
-          				<a class="dropdown-item" href="#">Something else here</a>
-        			</div>
+      			<li>
+      				<a class="nav-link" href="/showtodo">Todos's</a>
       			</li>
-      			<li class="nav-item">
-        			<a class="nav-link disabled" href="#">Disabled</a>
-      			</li>
-      			</ul>
-       			<p class="m-1 text-primary"> {{>loginButtons}}</p>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+              	
+              	<li>{{>loginButtons}}</li>
+              </ul>
+       			
        
      	 </div><!-- navbar here-->
     </nav>
@@ -306,9 +299,12 @@
 
 <template name="network_collections">
 	<h6>YOUR NETWORKS TODO HERE</h6>
-<ul class="list-group">
+ 
+<ul class="list-group"> 
+{{getpermission}} 
 {{#each network}}
 <li class="list-group-item">
+
 
        <div class="container container-fluid text-white" style="background: rgb(132, 145, 150)">
       		      <div class="row">
@@ -335,6 +331,7 @@
 
  {{/each}}
 </ul>
+
 <!-- modal for entering task -->
 	<div class="modal fade" id="modal_add_task_network" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
 		  <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -384,6 +381,49 @@
 	      </div>
 	    </div>
 	  </div><!-- todo add modal  here-->
+
+<!-- approval for new network modal-->
+    <div class="modal fade" id="modal_new_network" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content" style="background: #1a8cff">
+          <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalCenterTitle">New todo's</h5>
+          </div>
+          <div class="modal-body">       
+               {{#each networkunchecked}}
+               <div class="container-fluid">
+                 <div class="row">
+                   <div class="col-sm-6">
+                     <h5 class="bg bg-faded">{{gettitle todo_id}}</h5>
+                     <h6>Author Username:- {{getusername curr_id}}</h6>
+                   </div>
+                   <div class="col-sm-6">
+                     
+                       <button class="btn btn-success js_button_network_approval">Accept</button>
+                       <button class="btn btn-warning js_button_network_reject">Reject</button>
+                     
+                   </div>
+
+
+
+                 </div>
+
+               </div>
+                
+               {{/each}}
+          
+           
+            </div>
+            <div class="modal-footer">
+             
+           
+      
+           
+            </div>
+           
+        </div>
+      </div>
+    </div><!-- todo add modal  here-->
 
 
 </template>

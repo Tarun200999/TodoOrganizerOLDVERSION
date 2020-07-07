@@ -45,12 +45,18 @@ Meteor.methods({
             todo_id:todo_id,
             createdOn: new Date(),
             curr_id:curr_id,
-            network_id:network_id
+            network_id:network_id,
+            approved:false
+
         });
      },
      removetodo_fromnetwork :function(network_id)
      {
      	Network.remove({_id:network_id});
+     },
+     updateapproval :function(network_id)
+     {
+        Network.update({_id:network_id},{$set:{'approved':true}});
      }
 
 });
