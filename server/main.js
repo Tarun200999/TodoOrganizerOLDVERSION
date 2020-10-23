@@ -4,18 +4,16 @@ import { Todo } from "/lib/collection.js";
 import { Network } from "/lib/collection.js";
 Meteor.startup(function()
 {
-	
-  // code to run on server at startup
+	//
 }
 );
 
 Meteor.methods({
-     addtask : function(task,todo_id,description,user_id)
+     addtask : function(task,todo_id,user_id)
      {    
      	 Tasks.insert({
             task: task,
             createdAt: new Date(),
-            description:description,
             createdBy:user_id,
             createdOn:todo_id
         });
@@ -24,11 +22,14 @@ Meteor.methods({
      { 
        Tasks.remove(task_id);
      },
-     addtodo :function(title,description)
+     addtodo :function(title,description,due_time,due_date)
      {
      	Todo.insert({
      		title:title,
-     		description:description,
+         description:description,
+         Date:new Date(),
+         due_date:due_date,
+         due_time:due_time,
      		todoBy:Meteor.user()._id
      		});
      }
@@ -40,15 +41,14 @@ Meteor.methods({
      },
      addnetwork : function(todo_id,curr_id,network_id)
      {
-         console.log(todo_id);
-     	 Network.insert({
+          	Network.insert({
             todo_id:todo_id,
             createdOn: new Date(),
             curr_id:curr_id,
             network_id:network_id,
             approved:false
 
-        });
+      });
      },
      removetodo_fromnetwork :function(network_id)
      {

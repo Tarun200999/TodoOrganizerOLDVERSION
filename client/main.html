@@ -1,38 +1,243 @@
 <head>
-  <title>ToDo App</title>
+  <title>TODO APP</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-</head>
+   <link rel="stylesheet" href="main.css">
+ </head>
+<body style="background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(90,92,106,1) 0%, rgba(32,45,58,1) 81.3% );">
 
-<body style="background: rgb(195, 217, 247)">
 	
 </body>
+<!--IT THE LAYOUT OF THE PROJECT WINDOW -->
 <template name="ApplicationLayout">
-	{{> yield "1" }}
-	{{> yield "2" }}
-	<div class="container-fluid">
-	 <div class="row">
-	 	<div class="col-sm-6">
-	 	{{> yield "3" }}	
-	 	</div>
-	 	<div class="col-sm-6">
-	 	{{> yield "4" }}	
-	 	</div>
-
-	 </div>	
-     
+   <div style="margin:0px;display: flex;flex-direction: column;">
+	 <div style="margin-bottom: 20px;margin-top: 0px;position: -webkit-sticky;position: sticky;top: 0;">
+		 {{> yield "1" }}
+	 </div>
+	 <div style="margin-top: 20px;">
+		{{> yield "2" }}
+	 </div>
+	<div style="padding: 10px;height: 100%;">
+	    {{> yield "3" }}	
 	</div>
+	<div style="padding: 10px;">
+	 	{{> yield "4" }}	
+	</div>	
+ </div>	
 
 </template>
 
+<!--NAVBAR TEMPLATE IS HERE-->
+<template name="navbar">
+	<nav class="navbar navbar-expand-lg navbar-light navbar-fixed-top">
+			<a class="navbar-brand" style="color: floralwhite;" href="/">TODO</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+							<li>
+								<a class="nav-link" href="/showtodo" style="color: whitesmoke;">My Task</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/showtodo/networks" style="color:whitesmoke;">Shared To Me</a>
+							</li>  
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li style="margin-right: 30px;font-weight: 400;color: whitesmoke;padding: 10px;border-radius: 10px;">{{>loginButtons align="right"}}</li>
+						</ul>
+					
+		</div><!-- navbar here-->
+ </nav>
+</template>
+<template name="empty">
+	<div></div>
+</template>
+
+
+
+<!--THIS IS HOMEPAGE WHEN NO USER LOGGIND IN THE WEBSITE -->
+<template name="homepage">
+	<div>
+
+	 <h1 class="display-1" style="text-align: center;color:whitesmoke">Organize <span style="color: tomato;">Task</span></h1>
+	 <h2 style="text-align: center;font-weight: 400;margin-top: 60px;color:white;">With Your TeamMates,Friends,Collegues .....</h2>
+     <div style="margin-top: 30px;height: 300px;padding: 30px;">
+	   
+		<h5 class="display-4" style="margin-top: 100px;color: white;">Developer</h5>
+		<h5 style="margin-top: 20px;color: whitesmoke;font-weight: 200;">TARUN IT-2ND SHIFT 03596303118</h5>
+		<h5 style="margin-top: 20px;color:whitesmoke;font-weight: 200;">MAHARAJA SURAJMAL INSTITUTE OF TECHNOLOGY</h5>
+
+	 </div>	 
+
+	</div>	
+	
+</template>
+
+
+<!--THIS IS ADD TODO BUTTON -->
+
+
+<template name="add_todo_form">
+	<form class="js_addtodo_button">
+		<button class="btn btn-success" style="border-radius: 5px;float: right;margin-right: 50px;">ADD NEW</button>
+		
+	</form>
+		
+		
+		<div class="modal fade" id="modal_add_todo" style="background: rgba(0,0,0,0.5)">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <div class="modal-title">
+					<h6>Task Details</h6>
+					
+		        </div>
+		      </div>
+		      <div class="modal-body">       
+		        <form class="save_todo">
+	              <div class="form-group">
+	                <label for="todo_title">Title</label>
+	                <input type="text" class="form-control" placeholder="Title" id="todo_title"  name="todo_title"/>
+	              </div>
+	             <div class="form-group">
+	                <label for="todo_description">Description</label>
+	                <textarea class="form-control" id="todo_description" placeholder="Description" name="todo_description"></textarea>
+	               
+				 </div>
+				 <div class="form-group">
+					   <label for="todo_duedate"> Due date </label>
+					   <input type="date" class="form-control" id="todo-duedate" name="todo_duedate"/>
+				 </div>
+				 <div class="form-group">
+					<label for="todo_duetime"> Due time </label>
+					<input type="time" class="form-control" id="todo-duetime" value="09:00" name="todo_duetime"/>
+			     </div>
+
+	             <button class="btn btn-success">Add Task</button>
+	        </form> 
+	      </div>
+	      <div class="modal-footer">
+	        <button class="btn btn-warning" data-dismiss="modal">Close</button>
+	      </div>  
+	      </div>
+	    </div>
+	  </div><!-- todo add modal  here-->
+</template>
+
+
+<!--THIS IS SHOWTODO WHICH SHOW THE TODO OF THE USER-->
+<template name="showtodo">
+	<h3 style="color: white;margin:10px;font-weight: 200;">Task That's you add</h3>
+	<div style="display:flex;margin: 20px;flex-wrap: wrap;">
+		{{#each todo}}
+				 <div class="todo_show">
+					  <div>
+					  	<h3 style="font-weight:400;color: whitesmoke;">{{title}}</h3>
+						<h6 style="font-weight:100;">{{description}}</h6>
+						<h6><span style="color: whitesmoke;margin-top: 5px;">Add On</span> {{Date}}</h6>
+						<h6><span style="color: whitesmoke;">Due </span> {{due_date}}</h6>
+						<h6><spna style="color:whitesmoke;">Due Time</spna>Due Time {{due_time}}</h6>
+					  </div>
+					  <div style="display: flex;margin-left: 100px;">
+					 	    <a href="/showtodo/addtask/{{_id}}"><button class="js_addtask_button btn btn-success m-2" style="font-weight: 200;padding:5px;">View</button></a>
+					    	<button class="js_addnetwork_button btn btn-secondary" style="font-weight: 200;padding:2px;margin: 5px;">Add Collabator</button>
+							<button class="btn btn-warning remove" style="margin:5px;font-weight: 200;padding: 3px;">Remove</button>
+					   </div>
+				 </div>
+		   {{/each}}
+	</div>
+	
+
+    <div class="modal fade" id="modal_add_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
+		  <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+		    <div class="modal-content" style="background: #fdfdfd">
+		      <div class="modal-header">
+		       <h5 class="modal-title" id="exampleModalCenterTitle">Sub Tasks</h5>
+		      </div>
+		      <div class="modal-body">       
+			  <h5 style="font-weight: 400;">{{checktodos}}</h5>  
+			  {{#each item}}
+			   <div style="display: flex;flex-direction: column;border: 1px solid purple;border-radius: 5px;margin: 10px;padding: 10px;">
+				   <div style="display: flex;">
+							<div style="flex: 0.8;">
+                                <h5 style="color: rgb(109, 3, 109);">{{task}}</h5>
+								<h6 style="font-weight: 300; color: darkblue;margin-top: 10px;">Added By {{checkTheuser_showtodo createdBy}}</h6>
+						   </div>
+					    	<div style="flex: 0.2;">
+								<form class="js_remove-task_from_todo">
+									<button class="btn btn-warning m-3">Remove</button>
+								</form>
+					        </div>	
+					</div> 
+                     <div style="text-align: right;">
+							<h6 style="color: rgb(66, 2, 240);">{{createdAt}}</h6>  	
+					 </div>			 
+
+			   </div>
+			  {{/each}}
+
+			  </div>
+			
+	          <div class="modal-footer">
+              <form class="add-task">
+				  <div style="display: flex;align-items: center;">
+					<input type="text" name="task_title" placeholder="New Task">
+					<button class="btn btn-success" style="margin-left: 10px;">Add</button>
+				  </div>
+                
+              </form>
+
+	          </div>  
+	      </div>
+	    </div>
+	  </div><!-- todo add modal  here-->
+
+	   <div class="modal fade" id="modal_add_network">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		       <h5 class="modal-title" id="exampleModalCenterTitle">Add Collabator</h5>
+		      </div>
+		      <div class="modal-body">
+		      	 {{#each networksname}}
+		      <div class="container-fluid" style="margin:10px">
+		      	<div class="row">
+		      		<div class="col-sm-8">
+		      			 <h6>{{getnetwork_useranme network_id}}</h6>
+
+		      		</div>
+                    <div class="col-sm-4">
+                    	<button class="js_showtodo_network_delete btn btn-warning">Remove</button>
+                    </div>
+                 </div>
+	          </div> 
+		         {{/each}}
+		      
+              </div>
+	          <div class="modal-footer">
+              <form class="add_network">
+				  <div style="display: flex;align-items: center;">
+					<input type="text" name="network_user_name" placeholder="Enter Username">
+					<button class="btn btn-success" style="margin-left: 10px;">Add</button>
+				  </div>
+                
+              </form>
+
+	          </div>  
+	      </div>
+	    </div>
+	  </div><!-- todo add modal  here-->
+</template>
+
+<!--THIS IS USE TO DISPLAY THE TASK-->
 <template name="taskdisplay">
 	<h1 class="text-nowrap text-capitalize text-truncate text-">Tasks Listed Below</h1>
   <div class="container-fluid bg-white">
     <div class="row">
        <div class="col-md-8 col-sm-6">
          <div>
-
           <ul class="list-group">  
             {{#each item}}
           <li class="list-group-item l">
@@ -64,371 +269,94 @@
             <input type="submit" value="Submit">
          </form>
        </div>
-    </div>
-       
-       
+    </div>      
   </div>
 </template>
-
-
-
-
-
-
-<template name="showtodo">
-	<h6>YOUR TODO HERE</h6>
-	 <ul class="list-group">  
-            {{#each todo}}
-             <li class="list-group-item l">
-                <div class="container container-fluid bg-primary text-white">
-      		      <div class="row">
-        	          <div class="col-sm-8">
-          	               <h5 class="bg bg-faded">{{title}}</h5>
-          	               <h6>{{description}}</h6>
-          	               <h6>todo_id :- {{_id}}</h6>
-        	          </div>
-        	          <div class="col-sm-4">
-           	              <button class="btn btn-warning remove">Remove</button>
-           	              <a href="/showtodo/addtask/{{_id}}"><button class="js_addtask_button btn btn-info m-2">View</button></a>
-           	              <button class="js_addnetwork_button btn btn-secondary">Manage Network</button>
-
-        	          </div>
-       		      </div>
-       		      <div class="row">
-         	        <div class="col-md-12">
-           	           <h6 class="text-dark">User_id :-{{todoBy}}</h6>
-           	           
-         	        </div>
-       		      </div>
-     		    </div>
-    	  </li>
-   		     {{/each}}
-   	  </ul>
-
-    <div class="modal fade" id="modal_add_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
-		  <div class="modal-dialog modal-dialog-scrollable" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		       <h5 class="modal-title" id="exampleModalCenterTitle">Your Tasks</h5>
-		      </div>
-		      <div class="modal-body">       
-		         {{checktodos}}  
-            {{#each item}}
-           
-           <div class="container m-2 text-white bg-primary">
-      		<div class="row">
-        	<div class="col-md-8">
-          	<h5>{{task}}</h5>
-          	<h5>{{description}}</h5>
-          	<h6>Added by:- {{checkTheuser_showtodo createdBy}}</h6>
-        	</div>
-        	<div class="col-md-4">
-        	<form class="js_remove-task_from_todo">
-       	
-           	<button class="btn btn-warning m-3">Remove</button>
-           </form>
-        	</div>
-       		</div>
-       		<div class="row mt-2">
-         	<div class="col-md-12">
-           	<h6>{{createdAt}}</h6>
-         	</div>
-       		</div>
-     		</div>
-    		
-   			{{/each}}
-   		
-	         
-	          </div>
-	          <div class="modal-footer">
-	           
-	          <h5>Add Task</h5>
-              <form class="add-task">
-                 <input type="text" name="task_title" placeholder="Enter the Todo title">
-                 <input type="text" name="task_description" placeholder="Enter desscription">
-
-                 <button>ADD</button>
-              </form>
-
-	          </div>  
-	      </div>
-	    </div>
-	  </div><!-- todo add modal  here-->
-
-	   <div class="modal fade" id="modal_add_network">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		       <h5 class="modal-title" id="exampleModalCenterTitle">Add networks</h5>
-		      </div>
-		      <div class="modal-body">
-		      	 {{#each networksname}}
-		      <div class="container-fluid">
-		      	<div class="row">
-		      		<div class="col-sm-8">
-		      			 <h6>Person Username:-  {{getnetwork_useranme network_id}}</h6>
-
-		      		</div>
-                    <div class="col-sm-4">
-                    	<button class="js_showtodo_network_delete btn btn-warning">remove</button>
-                    </div>
-                 </div>
-	          </div> 
-		         {{/each}}
-		      
-              </div>
-	          <div class="modal-footer">
-	           
-	          <h5>Enter Username</h5>
-              <form class="add_network">
-                 <input type="text" name="network_user_name" placeholder="Enter the usrname here">
-                 <button>ADD</button>
-              </form>
-
-	          </div>  
-	      </div>
-	    </div>
-	  </div><!-- todo add modal  here-->
-</template>
-
-
-<template name="homepage">
-		  <div class="jumbotron text-center" style="margin-top:0">
-		    <h1>TODO LIST</h1>
-		    <p>Manage your work here!</p>
-		  </div>
-		 <div class="container">
-		   <div class="row">
-		     <div class="col-sm-4">
-		       <h3>Why we</h3>
-		       <ul>
-		        	<li>Secure</li>
-		        	<li>user friendly</li>
-		        	<li>you can share your work</li>
-		      </ul>
-		    </div>
-		    <div class="col-sm-4">
-		      <h3>Contact Us</h3>
-		      <p>tk4977163@gmail.com</p>
-		    </div>
-		    <div class="col-sm-4">
-		      <h3>Developer</h3>
-		      <p>Tarun</p>
-		    </div>
-		  </div>
-		  <div class="row">
-		  	<div class="col-sm-4">
-		  	  <div class="jumbotron">{{> loginButtons }}</div>	
-		  	</div>
-		  </div><!-- home page here-->
-		</div>
-
-</template>
-
-
-
-<template name="add_todo_form">
-	<form class="js_addtodo_button">
-		<button class="btn btn-success">ADD TODO</button>
-		
-	</form>
-		
-		
-		<div class="modal fade" id="modal_add_todo" style="background: rgba(0,0,0,0.5)">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <div class="modal-title">
-		        </div>
-		      </div>
-		      <div class="modal-body">       
-		        <form class="save_todo">
-	              <div class="form-group">
-	                <label for="todo_title">Title</label>
-	                <input type="text" class="form-control" id="todo_title" placeholder="url" name="todo_title"/>
-	              </div>
-	             <div class="form-group">
-	                <label for="todo_description">Description</label>
-	                <textarea class="form-control" id="todo_description" placeholder="Describe the todo here" name="todo_description"></textarea>
-	               
-                 </div>
-	             <button class="btn btn-success">save</button>
-	        </form> 
-	      </div>
-	      <div class="modal-footer">
-	        <button class="btn btn-warning" data-dismiss="modal">cancel</button>
-	      </div>  
-	      </div>
-	    </div>
-	  </div><!-- todo add modal  here-->
-</template>
-
-
-
-
-
-
- <template name="navbar">
-	   <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="/">TODO LIST</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
-                 <span class="navbar-toggler-icon"></span>
-            </button>
-
-         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      		 <ul class="navbar-nav mr-auto">
-      			<li class="nav-item active">
-        		<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      			</li>
-      			<li class="nav-item">
-        			<a class="nav-link" href="/showtodo/networks">Networks</a>
-      			</li>
-      			<li>
-      				<a class="nav-link" href="/showtodo">Todos's</a>
-      			</li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-              	
-              	<li>{{>loginButtons}}</li>
-              </ul>
-       			
-       
-     	 </div><!-- navbar here-->
-    </nav>
-</template>
-
 <template name="network_collections">
-	<h6>YOUR NETWORKS TODO HERE</h6>
- 
-<ul class="list-group"> 
-{{getpermission}} 
-{{#each network}}
-<li class="list-group-item">
+	<h3 style="color: white;font-weight: 300;">Tasks That are Shared to you</h3>
+ {{getpermission}}
+	<div style="display:flex;margin: 20px;flex-wrap: wrap;">
+		{{#each network}}
+				 <div style="display: flex;flex-direction: column; padding: 20px;border:2px solid rgb(252, 227, 119);flex-wrap: wrap;background-color: #FBAB7E;
+                   background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);;border-radius: 10px;margin: 20px;">
+					  <div>
+					  	<h3 style="font-weight:400;color: whitesmoke;">{{gettitle todo_id}}</h3>
+						<h6 style="font-weight:100;margin-bottom: 10px;">{{getdescription todo_id}}</h6>
+						
+						<h6><span style="color: whitesmoke;margin-top: 5px;">Username</span> {{getusername curr_id}}</h6>
+							<h6><span style="color: whitesmoke;margin-top: 5px;">Add On</span> {{getadddate todo_id}}</h6>
+							<h6><span style="color: whitesmoke;">Due </span>{{getduedate todo_id}}</h6>
+							<h6><spna style="color:whitesmoke;">Due Time</spna>Due Time {{getduetime todo_id}}</h6>
 
-
-       <div class="container container-fluid text-white" style="background: rgb(132, 145, 150)">
-      		      <div class="row">
-        	          <div class="col-sm-8">
-          	               <h5 class="bg bg-faded">{{gettitle todo_id}}</h5>
-          	               <h6>{{getdescription todo_id}}</h6>
-          	               <h6>Author Username:- {{getusername curr_id}}</h6>
-          	               <h6>todo_id :- {{todo_id}}</h6>
-          	               <h6>user_id :- {{curr_id}}</h6>
-        	          </div>
-        	          <div class="col-sm-4">
-           	              <button class="btn btn-danger remove_todo_from_network m-2">Remove</button>
-           	              <a href="/showtodo/addtask/{{_id}}"><button class="js_addtask_button_network btn btn-info m-2">View</button></a>
-           	          </div>
-       		      </div>
-       		      <div class="row">
-         	        <div class="col-md-12">
-           	           <h6 class="text-dark">{{createdOn}}</h6>
-           	           
-         	        </div>
-       		      </div>
-     		    </div>
-     </li>
-
- {{/each}}
-</ul>
-
-<!-- modal for entering task -->
+					  </div>
+					  <div style="display: flex;margin-left: 100px;">
+						<button class="btn btn-danger remove_todo_from_network m-2">Remove</button>
+						<a href="/showtodo/networks/addtask/{{_id}}"><button class="js_addtask_button_network btn btn-info m-2">View</button></a>
+					   </div>
+				 </div>
+		   {{/each}}
+</div>
 	<div class="modal fade" id="modal_add_task_network" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
-		  <div class="modal-dialog modal-dialog-scrollable" role="document">
-		    <div class="modal-content" style="background: #1a8cff">
+		  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+		    <div class="modal-content">
 		      <div class="modal-header">
-		       <h5 class="modal-title" id="exampleModalCenterTitle">Tasks Here</h5>
+		       <h5 class="modal-title" id="exampleModalCenterTitle">Sub Task</h5>
 		      </div>
 		      <div class="modal-body">       
-		           
-             {{#each item}}
-          
-           <div class="container m-2 text-white" style="background: #80bfff">
-      		<div class="row">
-        	<div class="col-md-8">
-          	<h3>{{task}}</h3>
-          	<h3>{{description}}</h3>
-        	</div>
-        	<div class="col-md-4">
-             <h6>Added by :- {{checkTheuser createdBy}}</h6>
-        	</div>
-       		</div>
-       		<div class="row mt-2">
-         	<div class="col-md-12">
-           	<h6>{{createdAt}}</h6>
-         	</div>
-       		</div>
-     		</div>
-    		
-   			{{/each}}
-   		
-	         
+				{{#each item}}	   
+				<div style="display: flex;flex-direction: column;border: 1px solid purple;border-radius: 5px;margin: 10px;padding: 10px;">
+					<div style="display: flex;">
+							 <div style="flex: 0.8;">
+								 <h5 style="color: rgb(109, 3, 109);">{{task}}</h5>
+								 <h6 style="font-weight: 300; color: darkblue;margin-top: 10px;">Added by {{checkTheuser createdBy}}</h6>
+							</div>
+							<div style="flex: 0.2;">
+
+							</div>
+					 </div> 
+					  <div style="text-align: right;">
+							 <h6 style="color: rgb(66, 2, 240);">{{createdAt}}</h6>  	
+					  </div>			 
+ 
+				</div>
+				{{/each}}
 	          </div>
 	          <div class="modal-footer">
-	           
-	          <h5>Add more Todo list</h5>
               <form class="add_task_network">
-                 <input type="text" name="task_title" placeholder="Enter the Todo title">
-                 <input type="text" name="task_description" placeholder="Enter desscription">
-
-                 <button>Add Task</button>
+                 <input type="text" name="task_title" placeholder="New Task">
+                 <button class="btn btn-success" style="margin-left: 10px;">Add</button>
               </form>
-
-   		
-	         
-	          </div>
-	         
+	          </div>  
 	      </div>
 	    </div>
-	  </div><!-- todo add modal  here-->
+	  </div>
 
 <!-- approval for new network modal-->
     <div class="modal fade" id="modal_new_network" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-        <div class="modal-content" style="background: #1a8cff">
+      <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
           <div class="modal-header">
-           <h5 class="modal-title" id="exampleModalCenterTitle">New todo's</h5>
+           <h5 class="modal-title" id="exampleModalCenterTitle">Someone Share You Todo's</h5>
           </div>
           <div class="modal-body">       
                {{#each networkunchecked}}
-               <div class="container-fluid">
+               <div class="container-fluid" style="border: 1px solid rgb(255, 115, 0);margin:10px;border-radius: 5px; padding: 10px;">
                  <div class="row">
                    <div class="col-sm-6">
                      <h5 class="bg bg-faded">{{gettitle todo_id}}</h5>
-                     <h6>Author Username:- {{getusername curr_id}}</h6>
+                     <h6>Author Username {{getusername curr_id}}</h6>
                    </div>
                    <div class="col-sm-6">
-                     
                        <button class="btn btn-success js_button_network_approval">Accept</button>
                        <button class="btn btn-warning js_button_network_reject">Reject</button>
-                     
                    </div>
-
-
-
                  </div>
-
-               </div>
-                
+               </div>  
                {{/each}}
-          
-           
             </div>
             <div class="modal-footer">
-             
-           
-      
-           
             </div>
-           
         </div>
       </div>
     </div><!-- todo add modal  here-->
-
-
 </template>
-
-
-
- 
-

@@ -22,5 +22,5 @@ shell-server@0.5.0            # Server-side component of the `meteor shell` comm
 autopublish@1.0.7             # Publish all data to the clients (for prototyping)
 accounts-password
 iron:router
-accounts-ui-unstyled
 session
+accounts-ui
