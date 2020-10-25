@@ -4,20 +4,17 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="main.css">
  </head>
-<body style="background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(90,92,106,1) 0%, rgba(32,45,58,1) 81.3% );">
-
-	
-</body>
-<!--IT THE LAYOUT OF THE PROJECT WINDOW -->
+<body class="background"></body>
+<!--IT Is THE LAYOUT OF THE PROJECT WINDOW -->
 <template name="ApplicationLayout">
    <div style="margin:0px;display: flex;flex-direction: column;">
-	 <div style="margin-bottom: 20px;margin-top: 0px;position: -webkit-sticky;position: sticky;top: 0;">
+	 <div class="navbar_top_fix"><!--to fix the navbar at top-->
 		 {{> yield "1" }}
 	 </div>
 	 <div style="margin-top: 20px;">
 		{{> yield "2" }}
 	 </div>
-	<div style="padding: 10px;height: 100%;">
+	<div style="padding: 10px;">
 	    {{> yield "3" }}	
 	</div>
 	<div style="padding: 10px;">
@@ -30,7 +27,7 @@
 <!--NAVBAR TEMPLATE IS HERE-->
 <template name="navbar">
 	<nav class="navbar navbar-expand-lg navbar-light navbar-fixed-top">
-			<a class="navbar-brand" style="color: floralwhite;" href="/">TODO</a>
+			<a class="navbar-brand" style="color: rgb(245, 238, 238);" href="/">TODO</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -38,10 +35,10 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
 							<li>
-								<a class="nav-link" href="/showtodo" style="color: whitesmoke;">My Task</a>
+								<a class="nav-link" href="/showtodo" style="color: whitesmoke;">My Todo</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/showtodo/networks" style="color:whitesmoke;">Shared To Me</a>
+								<a class="nav-link" href="/showtodo/networks" style="color:whitesmoke;">Todo Shared to me</a>
 							</li>  
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
@@ -54,19 +51,21 @@
 <template name="empty">
 	<div></div>
 </template>
-
-
+<template name="empty1">
+	<button type="button" class="btn btn-success" style="margin-left: 10px;" onClick="window.location.reload();">Refresh</button>
+</template>
 
 <!--THIS IS HOMEPAGE WHEN NO USER LOGGIND IN THE WEBSITE -->
 <template name="homepage">
 	<div>
 
 	 <h1 class="display-1" style="text-align: center;color:whitesmoke">Organize <span style="color: tomato;">Task</span></h1>
-	 <h2 style="text-align: center;font-weight: 400;margin-top: 60px;color:white;">With Your TeamMates,Friends,Collegues .....</h2>
+	 <h2 style="text-align: center;font-weight: 400;margin-top: 60px;color:white;">With Your TeamMates,Friends,Collegues...</h2>
      <div style="margin-top: 30px;height: 300px;padding: 30px;">
 	   
 		<h5 class="display-4" style="margin-top: 100px;color: white;">Developer</h5>
-		<h5 style="margin-top: 20px;color: whitesmoke;font-weight: 200;">TARUN IT-2ND SHIFT 03596303118</h5>
+		<h5 style="margin-top: 20px;color: whitesmoke;font-weight: 200;">TARUN</h5>
+		<h5 style="margin-top: 20px;color: whitesmoke;font-weight: 200;">IT-2ND SHIFT 03596303118</h5>
 		<h5 style="margin-top: 20px;color:whitesmoke;font-weight: 200;">MAHARAJA SURAJMAL INSTITUTE OF TECHNOLOGY</h5>
 
 	 </div>	 
@@ -81,19 +80,14 @@
 
 <template name="add_todo_form">
 	<form class="js_addtodo_button">
-		<button class="btn btn-success" style="border-radius: 5px;float: right;margin-right: 50px;">ADD NEW</button>
-		
+		<button class="btn btn-success" style="border-radius: 5px;float: right;margin-right: 50px;">ADD NEW</button>	
 	</form>
-		
-		
 		<div class="modal fade" id="modal_add_todo" style="background: rgba(0,0,0,0.5)">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <div class="modal-title">
-					<h6>Task Details</h6>
-					
-		        </div>
+					<h6>New SubTask Details</h6>
+					<button class="btn btn-warning" data-dismiss="modal">Close</button>	
 		      </div>
 		      <div class="modal-body">       
 		        <form class="save_todo">
@@ -112,15 +106,12 @@
 				 </div>
 				 <div class="form-group">
 					<label for="todo_duetime"> Due time </label>
-					<input type="time" class="form-control" id="todo-duetime" value="09:00" name="todo_duetime"/>
+					<input type="time" class="form-control" id="todo-duetime" value="05:30" name="todo_duetime"/>
 			     </div>
 
 	             <button class="btn btn-success">Add Task</button>
 	        </form> 
 	      </div>
-	      <div class="modal-footer">
-	        <button class="btn btn-warning" data-dismiss="modal">Close</button>
-	      </div>  
 	      </div>
 	    </div>
 	  </div><!-- todo add modal  here-->
@@ -129,8 +120,8 @@
 
 <!--THIS IS SHOWTODO WHICH SHOW THE TODO OF THE USER-->
 <template name="showtodo">
-	<h3 style="color: white;margin:10px;font-weight: 200;">Task That's you add</h3>
-	<div style="display:flex;margin: 20px;flex-wrap: wrap;">
+	<h3 style="color: white;margin:10px;font-weight: 200;">Todo that you added</h3>
+	<div style="display:flex;flex-wrap: wrap;">
 		{{#each todo}}
 				 <div class="todo_show">
 					  <div>
@@ -138,23 +129,22 @@
 						<h6 style="font-weight:100;">{{description}}</h6>
 						<h6><span style="color: whitesmoke;margin-top: 5px;">Add On</span> {{Date}}</h6>
 						<h6><span style="color: whitesmoke;">Due </span> {{due_date}}</h6>
-						<h6><spna style="color:whitesmoke;">Due Time</spna>Due Time {{due_time}}</h6>
+						<h6><spna style="color:whitesmoke;">Due Time </spna>{{due_time}}</h6>
 					  </div>
-					  <div style="display: flex;margin-left: 100px;">
+					  <div style="display: flex;">
 					 	    <a href="/showtodo/addtask/{{_id}}"><button class="js_addtask_button btn btn-success m-2" style="font-weight: 200;padding:5px;">View</button></a>
 					    	<button class="js_addnetwork_button btn btn-secondary" style="font-weight: 200;padding:2px;margin: 5px;">Add Collabator</button>
 							<button class="btn btn-warning remove" style="margin:5px;font-weight: 200;padding: 3px;">Remove</button>
 					   </div>
 				 </div>
-		   {{/each}}
+		{{/each}}
 	</div>
-	
-
     <div class="modal fade" id="modal_add_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
 		  <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
 		    <div class="modal-content" style="background: #fdfdfd">
 		      <div class="modal-header">
 		       <h5 class="modal-title" id="exampleModalCenterTitle">Sub Tasks</h5>
+			   <button class="btn btn-danger" data-dismiss="modal">Close</button>
 		      </div>
 		      <div class="modal-body">       
 			  <h5 style="font-weight: 400;">{{checktodos}}</h5>  
@@ -167,8 +157,10 @@
 						   </div>
 					    	<div style="flex: 0.2;">
 								<form class="js_remove-task_from_todo">
+								    
 									<button class="btn btn-warning m-3">Remove</button>
 								</form>
+								
 					        </div>	
 					</div> 
                      <div style="text-align: right;">
@@ -230,51 +222,10 @@
 	    </div>
 	  </div><!-- todo add modal  here-->
 </template>
-
-<!--THIS IS USE TO DISPLAY THE TASK-->
-<template name="taskdisplay">
-	<h1 class="text-nowrap text-capitalize text-truncate text-">Tasks Listed Below</h1>
-  <div class="container-fluid bg-white">
-    <div class="row">
-       <div class="col-md-8 col-sm-6">
-         <div>
-          <ul class="list-group">  
-            {{#each item}}
-          <li class="list-group-item l">
-           <div class="container container-fluid">
-      		<div class="row">
-        	<div class="col-md-8">
-          	<h3 class="bg bg-faded">{{task}}</h3>
-        	</div>
-        	<div class="col-md-4">
-           	<button class="btn btn-warning remove">Remove</button>
-        	</div>
-       		</div>
-       		<div class="row">
-         	<div class="col-md-12">
-           	<h6 class="text-dark">{{createdAt}}</h6>
-         	</div>
-       		</div>
-     		</div>
-    		</li>
-   			{{/each}}
-   			</ul>
-   			</div>
-       </div><!--todo items-->
-       <div class="col-md-4 col-sm-6">
-         <h5>Add more Todo list</h5>
-          <form class="add-task">
-            <input type="text" name="todotitle" placeholder="Enter the Todo title">
-            <input type="text" name="tododes" placeholder="Enter desscription">
-            <input type="submit" value="Submit">
-         </form>
-       </div>
-    </div>      
-  </div>
-</template>
+<!-- it is doing all the shred todo stuff-->
 <template name="network_collections">
-	<h3 style="color: white;font-weight: 300;">Tasks That are Shared to you</h3>
- {{getpermission}}
+	<h3 style="color: white;font-weight: 300;">Todo That are Shared to you</h3>
+    {{getpermission}}
 	<div style="display:flex;margin: 20px;flex-wrap: wrap;">
 		{{#each network}}
 				 <div style="display: flex;flex-direction: column; padding: 20px;border:2px solid rgb(252, 227, 119);flex-wrap: wrap;background-color: #FBAB7E;
@@ -283,10 +234,10 @@
 					  	<h3 style="font-weight:400;color: whitesmoke;">{{gettitle todo_id}}</h3>
 						<h6 style="font-weight:100;margin-bottom: 10px;">{{getdescription todo_id}}</h6>
 						
-						<h6><span style="color: whitesmoke;margin-top: 5px;">Username</span> {{getusername curr_id}}</h6>
+						<h6><span style="color: whitesmoke;margin-top: 5px;">Share By</span> {{getusername curr_id}}</h6>
 							<h6><span style="color: whitesmoke;margin-top: 5px;">Add On</span> {{getadddate todo_id}}</h6>
 							<h6><span style="color: whitesmoke;">Due </span>{{getduedate todo_id}}</h6>
-							<h6><spna style="color:whitesmoke;">Due Time</spna>Due Time {{getduetime todo_id}}</h6>
+							<h6><spna style="color:whitesmoke;">Due Time </spna> {{getduetime todo_id}}</h6>
 
 					  </div>
 					  <div style="display: flex;margin-left: 100px;">

@@ -44,12 +44,8 @@ Router.route('/', function () {
 	  });
 	  this.render("empty",{
        to:"4"
-	  });
-	 
-     	
+	  });	
     }
-    
-    
   });
 Router.route('/showtodo', function () 
 {
@@ -114,13 +110,11 @@ Router.route('/showtodo/networks/addtask/:_id', function ()
 });    
 Router.route('/showtodo/networks', function () 
 {    
-	
-
 	this.render('navbar',{
   	   to:"1"
          });
      
-     	this.render('empty',{
+     	this.render('empty1',{
   	   to:"2"
          });
      	this.render('network_collections',{
@@ -128,14 +122,12 @@ Router.route('/showtodo/networks', function ()
 			});
      	this.render('empty',{
   	     to:"4"
-		 });
-		
+		 });	
 });    
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY'
 });
 //this is used to configer the user login form
-
 Template.showtodo.helpers({
 	todo: function () {
 
@@ -192,7 +184,6 @@ Template.network_collections.helpers({
 	getTodo: function(todo_id,user_id)
 	{
        Session.set("network_todo",todo_id);
-       //Session.set("network_id",user_id);
 	},
 	todo:function()
 	{   
@@ -216,8 +207,9 @@ Template.network_collections.helpers({
        return Todo.findOne({_id:todo_id}).Date;
 	},
 	getduedate:function(todo_id)
-	{
+	{   
 		return Todo.findOne({_id:todo_id}).due_date;
+		
 	},
 	getduetime:function(todo_id){
         return Todo.findOne({_id:todo_id}).due_time;
@@ -230,24 +222,19 @@ Template.network_collections.helpers({
 	checkTheuser:function(user_id)
 	{
 		if(user_id==Meteor.user()._id)
-			return "you";
+			return "You";
 		else
 			return Meteor.users.findOne({_id:user_id}).username;
 	},
 	getpermission:function()
 	{
 		var unchecked=Network.find({network_id:Meteor.user()._id,approved:false}).count();
-		console.log(unchecked);
 		if(unchecked!=0)
 		{
 			$("#modal_new_network").modal('show');
 		}
 		
 	}
-
-	
-
-	
 });
 Template.network_collections.events({
 	'click .js_addtask_button_network':function(event)
@@ -278,7 +265,7 @@ Template.network_collections.events({
 			      var task=event.target.task_title.value;
 			      var user_id=Meteor.user()._id;
                  if(task.length==0)
-        	       alert("Invalid Entry");
+        	       alert("Enter Task");
                  else
                  { 
         	       Meteor.call("addtask",task,curr,user_id);
@@ -287,7 +274,7 @@ Template.network_collections.events({
 		      }
 				else
 				{
-					alert("Login/SignUp to inset task");
+					alert("Login / SignUp to insert Task");
 				}
 			
         return false;
@@ -296,23 +283,9 @@ Template.network_collections.events({
 
 // it is used to send the data to the items template
 
-Template.navbar.helpers({
-	username: function () {
-		if(Meteor.user())
-			{   
-				return Meteor.user().username;
-			}
-			else
-			{
-				return "anonamous user";
-			}
-	}
-});
-
 Template.showtodo.events({
 	'click .remove':function(){
 			Meteor.call("removetodo",this._id);
-
 		    return false;
 	},
 	'click .js_addtask_button':function(event){
@@ -322,7 +295,7 @@ Template.showtodo.events({
     ,
     'submit .js_remove-task_from_todo':function(event)
     {  
-    	Meteor.call("removetask",this._id);
+		Meteor.call("removetask",this._id);
        return false;
     },
     'click .js_showtodo_network_delete':function(event)
@@ -330,19 +303,19 @@ Template.showtodo.events({
        Meteor.call("removetodo_fromnetwork",this._id);
        return false;
     },
-
     'click .js_addnetwork_button':function(event){
     	Session.set("todoidofperson",this._id);
       $("#modal_add_network").modal('show');
         }
      ,
+	 
     'submit .add-task': function(event)
 	{   if(Meteor.user())
 		{   var curr=Session.get("currtodoid");
 			var task=event.target.task_title.value;
 			var user_id=Meteor.user()._id;
             if(task.length==0)
-        	alert("Invalid Entry");
+        	alert("Enter Task");
             else
             { 
         	  Meteor.call("addtask",task,curr,user_id);
@@ -351,7 +324,7 @@ Template.showtodo.events({
 		}
 		else
 		{
-			alert("Login/SignUp to inset task");
+			alert("Login / SignUp to insert Task");
 		}
        
         return false;
@@ -359,26 +332,25 @@ Template.showtodo.events({
 	'submit .add_network': function(event)
 	{   if(Meteor.user())
 		{   var todo_id=Session.get("todoidofperson");
-            console.log(todo_id);
 			var user_name=event.target.network_user_name.value;
             if(user_name.length==0)
             {
-        	   alert("Invalid Entry");
+        	   alert("Enter UserName");
             }
             else
             { 
         	  if(!Meteor.users.findOne({username:user_name}))
         	    {
-        	  	  alert("user not found man");
+        	  	  alert("User Not Found");
         	    }
         	  	else
         	  	{
         	  	  var user_id_found=Meteor.users.findOne({username:user_name})._id;
         	  	   if(Network.findOne({todo_id:todo_id,network_id:user_id_found}))
-        	  	       alert("this person is already added");
+        	  	       alert("Username Already Added");
         	  	   else
         	  	   {  if(user_id_found==Meteor.user()._id)
-        	  	   	    alert("you can'nt add yourself");
+        	  	   	    alert("You can'nt Add Yourself");
         	  	   	  else
         	  	   	  {  
         	  	 	  Meteor.call('addnetwork',todo_id,Meteor.user()._id,user_id_found);
@@ -391,7 +363,7 @@ Template.showtodo.events({
 		}
 		else
 		{
-			alert("Login/SignUp to inset task");
+			alert("Login/SignUp to insert a Task");
 		}
        event.target.network_user_name.value="";
         return false;
@@ -399,15 +371,6 @@ Template.showtodo.events({
 
 
 });
-
-Template.taskdisplay.events({
-	'click .remove':function(){
-			Meteor.call("removetask",this._id);
-		    return false;
-	}
-	
-});
-
 
 Template.add_todo_form.events({
     
@@ -458,7 +421,7 @@ Template.add_todo_form.events({
 		}    
 		else
 		{
-			alert("Login/SignUp to inset task");
+			alert("Login/SignUp to insert a Task");
 		}
         $("#modal_add_todo").modal('hide');
        
