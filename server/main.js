@@ -36,7 +36,7 @@ Meteor.methods({
      {
      	  Todo.remove(todo_id);
         Network.remove({todo_id:todo_id});
-        Tasks.remove({todo_id:todo_id});
+        Tasks.remove({createdOn:todo_id});
      },
      addnetwork : function(todo_id,curr_id,network_id)
      {
